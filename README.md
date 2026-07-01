@@ -57,22 +57,45 @@ CREATE DATABASE ems_db;
 
 ### 2. Backend Setup
 
+Navigate to the backend directory:
 ```bash
 cd backend
-
-# Update DB password in src/main/resources/application.properties
-# spring.datasource.password=YOUR_PASSWORD
-
-# Run (Windows)
-mvnw.cmd spring-boot:run
-
-# Run (Linux/Mac or if Maven is installed)
-mvn spring-boot:run
-
-# Build jar
-mvnw.cmd clean package -DskipTests
-java -jar target/ems-backend-1.0.0.jar
 ```
+
+Update your database password in `src/main/resources/application.properties` (or set the `SPRING_DATASOURCE_PASSWORD` environment variable).
+
+#### Running the Application
+* **Windows (PowerShell)**:
+  ```powershell
+  # If JAVA_HOME is not set, configure it first:
+  # $env:JAVA_HOME="C:\Program Files\Java\jdk-20"
+  .\mvnw.cmd spring-boot:run
+  ```
+* **Windows (Command Prompt)**:
+  ```cmd
+  mvnw.cmd spring-boot:run
+  ```
+* **Linux / macOS / Git Bash**:
+  ```bash
+  ./mvnw spring-boot:run
+  ```
+
+#### Building the JAR
+* **Windows (PowerShell)**:
+  ```powershell
+  .\mvnw.cmd clean package -DskipTests
+  java -jar target/ems-backend-1.0.0.jar
+  ```
+* **Windows (Command Prompt)**:
+  ```cmd
+  mvnw.cmd clean package -DskipTests
+  java -jar target/ems-backend-1.0.0.jar
+  ```
+* **Linux / macOS / Git Bash**:
+  ```bash
+  ./mvnw clean package -DskipTests
+  java -jar target/ems-backend-1.0.0.jar
+  ```
 
 The API starts at **http://localhost:8080**
 
@@ -80,9 +103,13 @@ The API starts at **http://localhost:8080**
 
 ### 3. Frontend Setup
 
+Navigate to the frontend directory:
 ```bash
 cd frontend
+```
 
+Install the dependencies and start the development server:
+```bash
 npm install
 npm run dev
 ```
@@ -195,6 +222,33 @@ app.jwt.expiration=86400000   # 24 hours in ms
 # Port
 server.port=8080
 ```
+
+---
+
+## Deployment on Render
+
+This project contains configuration scripts and layout to deploy the backend service on **Render**.
+
+### Option A: Deploy with Render Blueprint (Recommended)
+This is the easiest option and uses the pre-configured `render.yaml` environment structure.
+1. Log in to the [Render Dashboard](https://dashboard.render.com/).
+2. Click **+ New** (top right) and choose **Blueprint**.
+3. Select this repository.
+4. Render will parse `render.yaml` and configure the **Java** environment, correct build directories, and configurations automatically.
+
+### Option B: Deploy manually as a Web Service
+If you create a standard **Web Service** manually on the Render dashboard:
+1. Under **Settings**, configure the following:
+   * **Root Directory**: `backend`
+   * **Runtime**: `Java` (Do not select Node)
+   * **Build Command**: `bash mvnw clean package -DskipTests`
+   * **Start Command**: `java -jar target/ems-backend-1.0.0.jar`
+2. Under **Environment**, add the following environment variables:
+   * `SPRING_DATASOURCE_URL` (MySQL URL)
+   * `SPRING_DATASOURCE_USERNAME` (MySQL username)
+   * `SPRING_DATASOURCE_PASSWORD` (MySQL password)
+   * `APP_JWT_SECRET` (A strong token signing key)
+   * `CORS_ALLOWED_ORIGINS` (URL of your deployed frontend app)
 
 ---
 
