@@ -32,6 +32,12 @@
 set -euf
 [ "${MVNW_VERBOSE-}" != debug ] || set -x
 
+# Find directory of the script
+case "$0" in
+  */*) wrapper_dir="${0%/*}" ;;
+  *) wrapper_dir="." ;;
+esac
+
 # OS specific support.
 native_path() { printf %s\\n "$1"; }
 case "$(uname)" in
@@ -111,8 +117,8 @@ while IFS="=" read -r key value; do
   distributionUrl) distributionUrl=$(trim "${value-}") ;;
   distributionSha256Sum) distributionSha256Sum=$(trim "${value-}") ;;
   esac
-done <"${0%/*}/.mvn/wrapper/maven-wrapper.properties"
-[ -n "${distributionUrl-}" ] || die "cannot read distributionUrl property in ${0%/*}/.mvn/wrapper/maven-wrapper.properties"
+done <"${wrapper_dir}/.mvn/wrapper/maven-wrapper.properties"
+[ -n "${distributionUrl-}" ] || die "cannot read distributionUrl property in ${wrapper_dir}/.mvn/wrapper/maven-wrapper.properties"
 
 case "${distributionUrl##*/}" in
 maven-mvnd-*bin.*)
