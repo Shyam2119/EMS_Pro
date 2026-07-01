@@ -1,0 +1,3 @@
+# Ensure mvnw has LF line endings so it runs on Linux/Render
+mvnw text eol=lf
+backend/mvnw text eol=lf

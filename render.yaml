@@ -3,7 +3,7 @@ services:
     name: ems-backend
     env: java
     plan: free
-    buildCommand: cd backend && ./mvnw.cmd clean package -DskipTests
+    buildCommand: cd backend && ./mvnw clean package -DskipTests
     startCommand: cd backend && java -jar target/ems-backend-1.0.0.jar
     envVars:
       - key: SPRING_DATASOURCE_URL
