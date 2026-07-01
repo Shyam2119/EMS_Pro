@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: ems-backend
+    env: java
+    plan: free
+    buildCommand: cd backend && ./mvnw.cmd clean package -DskipTests
+    startCommand: cd backend && java -jar target/ems-backend-1.0.0.jar
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mysql://host.docker.internal:3306/ems_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - key: SPRING_DATASOURCE_USERNAME
+        value: root
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: your_mysql_password
+      - key: APP_JWT_SECRET
+        value: EmsSecretKey2024SuperLongKeyForJWTTokenGen!@#$
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://your-frontend-url.vercel.app
